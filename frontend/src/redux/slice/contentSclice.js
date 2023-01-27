@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import authHeader from "../../utils/authHeader";
 
-const BASE_URL = "http://localhost:5000/api";
+const BASE_URL = "https://mern-agumentik-backend.onrender.com/api";
 
 export const createContent = createAsyncThunk(
   "data/createContent",
