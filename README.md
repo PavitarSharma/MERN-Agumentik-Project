@@ -14,6 +14,7 @@ Project Live Link:   https://mern-agumentik-frontend.netlify.app
 ### Deployment for frontend - Netlify
 
 Default is Admin not user
+
 User base authintaction and authorization
 
 upload image and content from admin side and save in home page in category section
