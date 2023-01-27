@@ -1,0 +1,10 @@
+export { default as Home } from "./home/Home";
+export { default as Login } from "./auth/Login";
+export { default as Register } from "./auth/Register";
+export { default as Admin } from "./admin/Admin";
+export { default as Dashboard } from "./admin/Dashboard";
+export { default as Images } from "./admin/Images";
+export { default as Social } from "./admin/Social";
+export { default as Users } from "./admin/Users";
+export { default as Contents } from "./Contents";
+export { default as NotFound } from "./NotFound";
