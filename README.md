@@ -1,13 +1,13 @@
-### MERN Agumentik Submission
+# MERN Agumentik Submission
 
 
-# ReactJS, Redux-Toolkit, Material Ui - Frontend
+### ReactJS, Redux-Toolkit, Material Ui - Frontend
 
-# NodeJs, ExpressJS, MongoDB, REST API - Backend
+### NodeJs, ExpressJS, MongoDB, REST API - Backend
 
-# Deployment for backend - Render
+### Deployment for backend - Render
 
-# Deployment for frontend - Netlify
+### Deployment for frontend - Netlify
 
 
 User base authintaction and authorization
