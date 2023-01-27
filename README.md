@@ -2,7 +2,8 @@
 
 Project Live Link:   https://mern-agumentik-frontend.netlify.app
 
-![Uploading mern-agumentik-frontend.netlify.app_.png…]()
+![mern-agumentik-frontend netlify app_](https://user-images.githubusercontent.com/76960865/215142977-1c10ffb6-4851-45b8-badf-4760a3cc8176.png)
+
 
 ### ReactJS, Redux-Toolkit, Material Ui - Frontend
 
