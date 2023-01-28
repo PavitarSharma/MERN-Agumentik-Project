@@ -1,10 +1,10 @@
-import React from "react";
-import { useParams } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import { Box, InputBase, Typography, Button } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { updateContent } from "../redux/slice/contentSclice";
+import { getContent, updateContent } from "../redux/slice/contentSclice";
 import { toast } from "react-toastify";
 
 const validate = Yup.object({
@@ -22,15 +22,22 @@ const validate = Yup.object({
 const Contents = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate()
   const {error } = useSelector(state => state.contents)
-  console.log(id);
+ 
 
   const handleOnSubmit = (data) => {
-    dispatch(updateContent({id, data}))
+    dispatch(updateContent({id, image: data.image, content: data.content}))
     if(!error) {
-        toast.success("Content Update")
+      toast.success("Update successfully")
+      navigate("/")
+    }else {
+      toast.error("Try again!")
     }
   };
+
+
+
   return (
     <Box sx={{
         display: "flex",
@@ -40,8 +47,8 @@ const Contents = () => {
     }}>
       <Formik
         initialValues={{
-          image: "",
-          content: "",
+          image:  "",
+          content:  "",
         }}
         validationSchema={validate}
         onSubmit={handleOnSubmit}

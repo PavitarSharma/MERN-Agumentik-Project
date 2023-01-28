@@ -51,7 +51,7 @@ const Category = () => {
           contents?.map((content) => {
             return (
               <Box key={content._id} sx={{ position: "relative" }}>
-                {/* <Link to={`/content/${content._id}`}> */}
+                <Link to={`/content/${content._id}`}>
                   <Box sx={{ width: { md: "350px", sm: "450px" } }}>
                     <img
                       src={content.image}
@@ -63,7 +63,7 @@ const Category = () => {
                       }}
                     />
                   </Box>
-                {/* </Link> */}
+                </Link>
 
                 <Typography
                   sx={{

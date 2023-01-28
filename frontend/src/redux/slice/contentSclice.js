@@ -2,7 +2,8 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import authHeader from "../../utils/authHeader";
 
-const BASE_URL = "https://mern-agumentik-backend.onrender.com/api";
+// const BASE_URL = "https://mern-agumentik-backend.onrender.com/api";
+const BASE_URL = "http://localhost:5000/api";
 
 export const createContent = createAsyncThunk(
   "data/createContent",
@@ -56,20 +57,48 @@ export const getAllContent = createAsyncThunk(
   }
 );
 
+export const getContent = createAsyncThunk(
+  "content/getContent",
+  async (id, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.get(`${BASE_URL}/content/${id}`, {
+        headers: authHeader(),
+      });
+
+      if (data) {
+        return data;
+      }
+    } catch (error) {
+      console.error(error);
+      // return custom error message from API if any
+      if (error.response && error.response.data.message) {
+        return rejectWithValue(error.response.data.message);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
+
 export const updateContent = createAsyncThunk(
   "data/updateContent",
-  async ({ id, body }, { rejectWithValue }) => {
+  async ({ id, image, content }, { rejectWithValue }) => {
     try {
       const config = {
         headers: authHeader(),
       };
-      const res = await axios.put(`${BASE_URL}/content/${id}`, body, config);
+      const res = await axios.put(
+        `${BASE_URL}/content/${id}`,
+        { image, content },
+        config
+      );
+
       const data = await res.data;
+      
 
       return data;
     } catch (error) {
       console.log(error);
-      console.log(`${BASE_URL}/content/${id}`);
       if (error.response && error.response.data.message) {
         return rejectWithValue(error.response.data.message);
       } else {
@@ -173,6 +202,23 @@ export const contentSlice = createSlice({
         state.success = true;
       })
       .addCase(getAllContent.rejected, (state, action) => {
+        state.loading = false;
+        state.contents = null;
+        state.error = true;
+      })
+
+      .addCase(getContent.pending, (state, action) => {
+        state.loading = true;
+        state.error = null;
+      })
+
+      .addCase(getContent.fulfilled, (state, action) => {
+        state.loading = false;
+        state.content = action.payload.data;
+        state.error = null;
+        state.success = true;
+      })
+      .addCase(getContent.rejected, (state, action) => {
         state.loading = false;
         state.contents = null;
         state.error = true;

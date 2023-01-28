@@ -37,6 +37,26 @@ export const getAllContentData = async (req, res, next) => {
   }
 };
 
+export const getContentData = async (req, res, next) => {
+  try {
+    const content = await Content.findById(req.params.id);
+
+    if(!content) {
+      return res.status(404).json("Data not found")
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: content,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 export const updateContentData = async (req, res, next) => {
     try {
         const { image, content } = req.body;
