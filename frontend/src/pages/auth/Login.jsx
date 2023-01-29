@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Form, Formik } from "formik";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -25,13 +25,27 @@ const validate = Yup.object({
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { error } = useSelector((state) => state.users);
-
+  const { error, token, message, success } = useSelector((state) => state.users);
+  const location=useLocation();
+    let path='/';
+    if(location.state){
+        path=location.state.path;
+    }
+  
+  
   const handleOnSubmit = (data) => {
     dispatch(signIn(data));
-    navigate("/");
-    toast.success("User logged in successfully.");
+    
+    // navigate("/");
+   
   };
+
+  useEffect(() => {
+    if(token){
+     navigate(path) ;
+     toast.success("Userlogged in successfully")
+    }
+  }, [token,navigate,path])
   return (
     <Box
       sx={{
@@ -59,7 +73,7 @@ const Login = () => {
           handleChange,
           handleBlur,
           handleSubmit,
-          isSubmitting,
+          // isSubmitting,
           /* and other goodies */
         }) => (
           <Form
@@ -83,10 +97,24 @@ const Login = () => {
                 fontSize: "32px",
                 fontWeight: 600,
                 mt: "10px",
+                mb: "0",
               }}
             >
               Login
             </Typography>
+
+            {error && (
+              <Typography
+                sx={{
+                  textAlign: "center",
+                  fontSize: "14px",
+                  fontWeight: 600,
+                  color: "#e53935",
+                }}
+              >
+                {error}
+              </Typography>
+            )}
 
             <Box>
               <InputBase
@@ -149,7 +177,7 @@ const Login = () => {
                 fontSize: "16px",
                 background: "blue",
               }}
-              disabled={isSubmitting}
+              // disabled={isSubmitting}
             >
               Login
             </Button>

@@ -48,7 +48,7 @@ const Category = () => {
         }}
       >
         {contents &&
-          contents?.map((content) => {
+          contents.map((content) => {
             return (
               <Box key={content._id} sx={{ position: "relative" }}>
                 <Link to={`/content/${content._id}`}>

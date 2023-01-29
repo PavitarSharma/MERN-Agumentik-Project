@@ -13,7 +13,10 @@ Project Live Link:   https://mern-agumentik-frontend.netlify.app
 
 ### Deployment for frontend - Netlify
 
-Default is Admin not user
+If you want to loging as an admin
+
+email: pavitarsharma1442gmail.com
+password: 123456789
 
 User base authintaction and authorization
 

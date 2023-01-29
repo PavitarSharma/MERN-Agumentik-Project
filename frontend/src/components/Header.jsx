@@ -36,6 +36,7 @@ const Header = ({ isTopOfPage, selectedPage, setSelectedPage }) => {
     toast.success("User logged out");
     dispatch(logout());
     localStorage.removeItem("token")
+    localStorage.removeItem("user")
     navigate("/login");
   };
   return (
@@ -142,10 +143,10 @@ const Header = ({ isTopOfPage, selectedPage, setSelectedPage }) => {
               </Button>
             ) : (
               <Button
-                onClick={() => navigate("/login")}
+                
                 sx={{ textTransform: "capitalize", fontSize: "17px" }}
               >
-                user.name
+                {user.name}
               </Button>
             )}
             <Button

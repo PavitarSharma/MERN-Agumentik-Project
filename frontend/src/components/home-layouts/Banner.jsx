@@ -1,11 +1,11 @@
-import React from "react";
-import { motion } from "framer-motion";
-import { Box, Stack, Paper, Typography, Button } from "@mui/material";
+import { Box, Stack, Typography, Button } from "@mui/material";
 import bannerImage from "../../assets/banner.jpg";
-import { Modal, SocialMediaIcons } from "../";
+import {  Popup, SocialMediaIcons } from "../";
+import { useState } from "react";
 const Banner = () => {
-  const [popup, setPopup] = React.useState(false);
-  const openPopup = () => setPopup((prev) => !prev);
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   return (
     <>
       <Stack
@@ -77,17 +77,23 @@ const Banner = () => {
           </Box>
           <Button
             variant="outlined"
-            onClick={openPopup}
+            onClick={handleOpen}
             sx={{
               marginTop: "20px",
-              textTransform: "capitalize"
+              textTransform: "capitalize",
             }}
-            
           >
             Open Modal
           </Button>
 
-          {popup ? <Modal setPopup={setPopup} /> : null}
+          {open ? (
+            <Popup
+              handleClose={handleClose}
+              handleOpen={handleOpen}
+              open={open}
+              setOpen={setOpen}
+            />
+          ) : null}
         </Box>
       </Stack>
     </>

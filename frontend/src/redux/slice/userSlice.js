@@ -2,7 +2,8 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import authHeader from "../../utils/authHeader";
 
-const BASE_URL = "https://mern-agumentik-backend.onrender.com/api/users";
+// const BASE_URL = "https://mern-agumentik-backend.onrender.com/api/users";
+const BASE_URL = "http://localhost:5000/api/users";
 const user = JSON.parse(localStorage.getItem("user"));
 
 export const signUp = createAsyncThunk(
@@ -94,12 +95,43 @@ export const getAllUser = createAsyncThunk(
   }
 );
 
+export const updateUserRole = createAsyncThunk(
+  "auth/updateUserRole",
+  async ({ id, role }, { rejectWithValue }) => {
+    try {
+      // configure header's Content-Type as JSON
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      const { data } = await axios.put(
+        `${BASE_URL}/role/${id}`,
+        { role },
+        {
+          headers: authHeader(),
+        }
+      );
+
+      return data;
+    } catch (error) {
+      console.log(error);
+      // return custom error message from API if any
+      if (error.response && error.response.data.message) {
+        return rejectWithValue(error.response.data.message);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
+
 export const updateSocialLinks = createAsyncThunk(
   "auth/updateSocialLink",
   async (jsonData, { rejectWithValue }) => {
     try {
       // configure header's Content-Type as JSON
-    
+
       const { data } = await axios.put(
         `${BASE_URL}/profile/${user._id}`,
         jsonData,
@@ -149,11 +181,13 @@ export const userSlice = createSlice({
         state.loading = false;
         state.user = action.payload.user;
         state.success = true;
+        state.message = action.payload.message;
       })
       .addCase(signUp.rejected, (state, action) => {
         state.loading = false;
-        state.message = true;
+        state.message = action.payload;
         state.user = null;
+        state.success = false;
         state.error = action.payload;
       })
 
@@ -166,12 +200,14 @@ export const userSlice = createSlice({
         state.loading = false;
         state.user = action.payload.user;
         state.success = true;
+        state.message = action.payload.message;
         state.token = action.payload.token;
       })
       .addCase(signIn.rejected, (state, action) => {
         state.loading = false;
-        state.message = true;
+        state.message = action.payload;
         state.user = null;
+        state.success = false;
         state.error = action.payload;
       })
 
@@ -208,6 +244,22 @@ export const userSlice = createSlice({
         state.message = true;
         state.user = null;
         state.error = action.payload;
+      })
+
+      .addCase(updateUserRole.pending, (state, action) => {
+        state.loading = true;
+        state.error = null;
+      })
+
+      .addCase(updateUserRole.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload.user;
+        state.success = true;
+      })
+      .addCase(updateUserRole.rejected, (state, action) => {
+        state.loading = false;
+        state.user = null;
+        state.success = false;
       });
   },
 });

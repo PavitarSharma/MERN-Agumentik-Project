@@ -2,20 +2,52 @@ import { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllUser } from "../../redux/slice/userSlice";
-import { Box, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-
-
+import { getAllUser, updateUserRole } from "../../redux/slice/userSlice";
+import {
+  Box,
+  Button,
+  FormControl,
+  InputBase,
+  InputLabel,
+  MenuItem,
+  Select,
+  Stack,
+} from "@mui/material";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function Users() {
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
+  const location = useLocation();
   const { loading, error, users, user } = useSelector((state) => state.users);
-  const [isUser, setIsUser] = useState(false);
   const [userRole, setUserRole] = useState("");
+  const [userId, setUserId] = useState(null);
+  let path = "/";
+  if (location.state) {
+    path = location.state.path;
+  }
   useEffect(() => {
     dispatch(getAllUser());
   }, [dispatch]);
+
+  useEffect(() => {
+    if(user.role==="user"){
+     navigate(path) ;
+    }
+  }, [user,navigate,path])
+
+  const selectUserRole = (id) => {
+    let user = users.filter((user) => user._id === id);
+    setUserRole(user[0].role);
+    setUserId(user[0]._id);
+  };
+
+  const updateRole = () => {
+    dispatch(updateUserRole({ id: userId, role: userRole }));
+    if (user.role === "user") {
+      navigate("/");
+    }
+  };
 
   if (loading) {
     return (
@@ -32,71 +64,92 @@ export default function Users() {
       </>
     );
   }
-
-  const updateUser = (id) => {
-    const findUser = [...users].find((user) => user._id === id);
-    if (findUser) {
-      setIsUser((prev) => !prev);
-      console.log(findUser);
-    }
-  };
   return (
-    <Box
-      sx={{
-        overflow: "scroll",
-      }}
-    >
-      <table className="table">
-        <thead className="table-head">
-          <tr>
-            <th>id</th>
+    <Stack>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          maxWidth: "400px",
+          marginLeft: "auto",
+          marginRight: "auto",
+          marginBottom: "80px",
+          gap: "20px",
+        }}
+      >
+        <InputBase
+          id="role"
+          type="role"
+          name="role"
+          onChange={(event) => setUserRole(event.target.value)}
+          value={userRole}
+          placeholder="Update Role"
+          sx={{
+            border: "1px solid gray",
+            width: "100%",
+            padding: "10px",
+            borderRadius: "4px",
+            fontSize: "16px",
+          }}
+        />
+        <Button
+          type="submit"
+          variant="contained"
+          onClick={updateRole}
+          sx={{
+            padding: "10px",
+            color: "white",
+            fontWeight: 600,
+            textTransform: "capitalize",
+            fontSize: "16px",
+            background: "blue",
+            padding: "12px 30px",
+          }}
+        >
+          Update
+        </Button>
+      </Box>
+      <Box
+        sx={{
+          overflow: "scroll",
+        }}
+      >
+        <table className="table">
+          <tbody className="table-body">
+            <tr>
+              <td>id</td>
 
-            <th>Name</th>
+              <td>Name</td>
 
-            <th>Email</th>
+              <td>Email</td>
 
-            <th>Type</th>
+              <td>Type</td>
+            </tr>
+            {users &&
+              users?.map((user, index) => {
+                const { name, email, role } = user;
+                return (
+                  <tr key={user._id}>
+                    <td>{index + 1}</td>
 
-            <th>Change Role</th>
-          </tr>
-        </thead>
+                    <td>{name}</td>
 
-        <tbody className="table-body">
-          {users &&
-            users?.map((user, index) => {
-              const { name, email, role } = user;
-              return (
-                <tr key={user._id}>
-                  <th>{index + 1}</th>
+                    <td>{email}</td>
 
-                  <th>{name}</th>
+                    <td className="px-6 py-2 text-md text-gray-500 capitalize cursor-pointer">
+                      {role}
+                    </td>
 
-                  <th>{email}</th>
-
-                  <th className="px-6 py-2 text-md text-gray-500 capitalize cursor-pointer">
-                    {role}
-                  </th>
-               
-
-                  <th>
-                    <select
-                      name="role"
-                      id="role"
-                      value={userRole || ""}
-                      onChange={(e) => setUserRole(e.target.value)}
-                    >
-                      <option value="admin">Admin</option>
-                      <option value="user">User</option>
-                    </select>
-                  </th>
-                  <th>
-                    <EditIcon onClick={() => updateUser(user._id)} />
-                  </th>
-                </tr>
-              );
-            })}
-        </tbody>
-      </table>
-    </Box>
+                    <td>
+                      <EditIcon onClick={() => selectUserRole(user._id)} />
+                    </td>
+                  </tr>
+                );
+              })}
+          </tbody>
+        </table>
+      </Box>
+    </Stack>
   );
 }

@@ -3,6 +3,7 @@ import { Box, Button, Stack, Typography } from "@mui/material";
 import AnchorLink from "react-anchor-link-smooth-scroll";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { logout } from "../redux/slice/userSlice";
 
 export const SidebarLink = ({
@@ -122,7 +123,7 @@ const Sidebar = ({ selectedPage, setSelectedPage, openSidebar }) => {
                 onClick={() => navigate("/login")}
                 sx={{ textTransform: "capitalize", fontSize: "17px" }}
               >
-                user.name
+                {user.name}
               </Button>
             )}
             <Button

@@ -17,7 +17,9 @@ const SocialMediaIcons = () => {
     >
       <a
         href={
-          user ? user.linkedinLink : "https://www.linkedin.com"
+          user && user.linkedinLink
+            ? user.linkedinLink
+            : "https://www.linkedin.com"
         }
         target="_blank"
         rel="noreferrer"
@@ -30,7 +32,11 @@ const SocialMediaIcons = () => {
       </a>
 
       <a
-        href={user ? user.facebookLink : "https://www.facebook.com"}
+        href={
+          user && user.facebookLink
+            ? user.facebookLink
+            : "https://www.facebook.com"
+        }
         target="_blank"
         rel="noreferrer"
       >
@@ -42,7 +48,9 @@ const SocialMediaIcons = () => {
       </a>
       <a
         href={
-          user ? user.instagramLink : "https://www.instagram.com/"
+          user && user.instagramLink
+            ? user.instagramLink
+            : "https://www.instagram.com/"
         }
         target="_blank"
         rel="noreferrer"
